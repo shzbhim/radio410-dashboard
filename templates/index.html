@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Index</title>
+    <link href='https://fonts.googleapis.com/css?family=Arimo&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Noto+Serif&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" media="all" />
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='moment-with-locales-ru.min.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<section id="header">
+    <nav>
+        <ul>
+            <li><a href="#" class="active">Главная</a></li>
+            <li><a href="#">RSS</a></li>
+            <li><a href="#">Автобус</a></li>
+        </ul>
+    </nav>
+    <div class="clear"></div>
+</section>
+<section id="main">
+
+    {% for broadcast in broadcasts %}
+    <article>
+        {{ broadcast.id }}
+        {{ broadcast.text }}
+    </article>
+    <article class="release">
+        <h2>Эфир <span class="broadcast-time" data-from-time="{{ broadcast.from_time }}" data-to-time="{{ broadcast.to_time }}"></span><span class="broadcast-status"></span></h2>
+        <section class="post">
+            <a href="{{ url_for('static', filename=broadcast.cover_url) }}"><img src="{{ url_for('static', filename=broadcast.cover_url) }}" alt="" class="release-cover" /></a>
+            {{ broadcast.txt|safe }}
+        </section>
+        <button type="button">Слушать OGG</button>
+    </article>
+    {% endfor %}
+</section>
+</body>
+</html>

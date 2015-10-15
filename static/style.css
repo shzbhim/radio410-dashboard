@@ -1,0 +1,95 @@
+body {
+    background: url('asphalt3.jpg');
+    background-color: #17161b;
+    background-position: left top;
+    background-attachment: fixed;
+    background-repeat: repeat;
+
+    color: #ffffff;
+}
+
+section#header nav {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    width: 100%;
+    background-color: #000000;
+}
+
+section#header nav ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+section#header nav ul li {
+    float: left;
+    list-style-type: none;
+}
+
+section#header nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Arimo', sans-serif;
+    font-variant: small-caps;
+    display: block;
+    padding: 15px;
+}
+
+section#header nav a:hover {
+    color: #ffffff;
+    background-color: #313131;
+    text-decoration: none;
+}
+
+section#main {
+    width: 900px;
+    margin: auto;
+    margin-top: 70px;
+}
+
+article.release {
+    margin-top: 20px;
+    padding: 15px;
+    background: #1c2023;
+    color: #d9d9de;
+}
+
+article.release h2 {
+    font-family: 'Arimo', sans-serif;
+}
+
+article.release p {
+    font-family: 'Noto Serif', serif;
+}
+
+article.release p a {
+    color: #fdd696
+}
+
+article.release p a:hover {
+    color: #ffc86a;
+    text-decoration: none;
+}
+
+img.release-cover {
+    max-width: 200px;
+    float: left;
+    margin-right: 10px;
+}
+
+button {
+    color: #000000;
+    font-family: 'Arimo', sans-serif;
+}
+
+.broadcast-status {
+    font-size: 0.7em;
+}
+
+.broadcast-status.status-coming {
+    color: #ffc86a;
+}
+
+.broadcast-status.status-playing {
+    color: #86ff6a;
+}
