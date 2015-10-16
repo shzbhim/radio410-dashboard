@@ -8,6 +8,9 @@ from flask import Flask, request, session, url_for, redirect, \
      render_template, abort, g, flash, _app_ctx_stack
 from werkzeug import check_password_hash, generate_password_hash
 
+import markdown
+import os
+
 
 # configuration
 DATABASE = '/tmp/radio_dashboard.db'
@@ -93,75 +96,37 @@ class Announcement:
                   [text])
         db.commit()
 
-def test_data():
-    return [
-            {
 
-                'from_time': '2015-10-15T19:21:13+03:00',
-                'to_time': '',
-                'cover_url': 'images/1444497910945.jpg',
-                'txt': u'''
-<p>Сегодня в 20:30 на +Радио 410 начнётся небольшой эфир, посвящённый психоделик-року, ololo.</p>
-<p>Вы сможете услышать краткий неполный обзор дискографий американских команд Dengue Fever (LA) и Snail (Сиэтл), кроме того прозвучит небольшая подборка из продукции лейбла Riding Easy Records, который базируется в тихом пляжном городке Эрмоса-бич штат Калифорния.</p>
-<p> Не надо открывать поток браузером! Если вы не знаете, что с ним делать, откройте плейлист.  </p>
-<p> Поток: <a href="http://radio.410chan.ru:8000/radio">http://radio.410chan.ru:8000/radio</a> </p>
-<p> Плейлист: <a href="http://radio.410chan.ru:8000/radio.m3u">http://radio.410chan.ru:8000/radio.m3u</a> </p>'''
-            },
-            {
+def load_text(fpath):
+    with open(fpath, 'r') as f:
+        return f.read().decode('utf8')
 
-                'from_time': '2015-10-15T18:21:13+03:00',
-                'to_time': '',
-                'cover_url': 'images/1444497910945.jpg',
-                'txt': u'''
-<p>Сегодня в 20:30 на +Радио 410 начнётся небольшой эфир, посвящённый психоделик-року, ololo.</p>
-<p>Вы сможете услышать краткий неполный обзор дискографий американских команд Dengue Fever (LA) и Snail (Сиэтл), кроме того прозвучит небольшая подборка из продукции лейбла Riding Easy Records, который базируется в тихом пляжном городке Эрмоса-бич штат Калифорния.</p>
-<p> Не надо открывать поток браузером! Если вы не знаете, что с ним делать, откройте плейлист.  </p>
-<p> Поток: <a href="http://radio.410chan.ru:8000/radio">http://radio.410chan.ru:8000/radio</a> </p>
-<p> Плейлист: <a href="http://radio.410chan.ru:8000/radio.m3u">http://radio.410chan.ru:8000/radio.m3u</a> </p>'''
-            },
-            {
 
-                'from_time': '2015-10-15T19:21:13+03:00',
-                'to_time': '',
-                'cover_url': 'images/1444497910945.jpg',
-                'txt': u'''
-<p>Сегодня в 20:30 на +Радио 410 начнётся небольшой эфир, посвящённый психоделик-року, ololo.</p>
-<p>Вы сможете услышать краткий неполный обзор дискографий американских команд Dengue Fever (LA) и Snail (Сиэтл), кроме того прозвучит небольшая подборка из продукции лейбла Riding Easy Records, который базируется в тихом пляжном городке Эрмоса-бич штат Калифорния.</p>
-<p> Не надо открывать поток браузером! Если вы не знаете, что с ним делать, откройте плейлист.  </p>
-<p> Поток: <a href="http://radio.410chan.ru:8000/radio">http://radio.410chan.ru:8000/radio</a> </p>
-<p> Плейлист: <a href="http://radio.410chan.ru:8000/radio.m3u">http://radio.410chan.ru:8000/radio.m3u</a> </p>'''
-            },
-            {
+def parse_post(txt):
+    md = markdown.Markdown(extensions = ['markdown.extensions.meta'])
+    html = md.convert(txt)
+    meta = md.Meta
 
-                'from_time': '2015-10-15T19:21:13+03:00',
-                'to_time': '',
-                'cover_url': 'images/1444497910945.jpg',
-                'txt': u'''
-<p>Сегодня в 20:30 на +Радио 410 начнётся небольшой эфир, посвящённый психоделик-року, ololo.</p>
-<p>Вы сможете услышать краткий неполный обзор дискографий американских команд Dengue Fever (LA) и Snail (Сиэтл), кроме того прозвучит небольшая подборка из продукции лейбла Riding Easy Records, который базируется в тихом пляжном городке Эрмоса-бич штат Калифорния.</p>
-<p> Не надо открывать поток браузером! Если вы не знаете, что с ним делать, откройте плейлист.  </p>
-<p> Поток: <a href="http://radio.410chan.ru:8000/radio">http://radio.410chan.ru:8000/radio</a> </p>
-<p> Плейлист: <a href="http://radio.410chan.ru:8000/radio.m3u">http://radio.410chan.ru:8000/radio.m3u</a> </p>'''
-            },
-            {
-                'from_time': '2015-10-15T19:21:13+03:00',
-                'to_time': '',
-                'cover_url': 'images/2.jpg',
-                'txt': u'''
-<p>Добрый вечер!</p>
-<p>Сегодня в 20:00 московского времени на Радио 410 начнётся спонтанный субботне-вечерний эфир без чёткой жанровой направленности.</p>
-<p>Брант Бьорк, Ноэль Галлахер, слегка протухший ретровейв, польский психоделик, немного японщины, джаз и, конечно, ваши реквесты будут звучать сегодня на Радио 410 с одной единственной целью: попробовать создать атмосферу спокойного субботнего вечера в условиях стремительно приближающегося лета.</p>
-<p>OGG: http://radio.410chan.ru:8000/live.ogg MP3: http://libera.thordendal.ru:8000/radio.mp3</p>
-<p>Jabber: thordendal@thordendal.ru</p>
-<p>Реквесты можно заливать на любой удобный вам файлообменник.</p>'''
+    return {
+                'from_time': meta['from_time'][0],
+                'to_time': meta['to_time'][0],
+                'cover_url': meta['cover_url'][0],
+                'txt': html
             }
-            ]
 
+
+def test_md_data():
+    mddir = os.path.abspath('md')
+    md_paths = [os.path.join(mddir, fname) for fname in os.listdir(mddir) if fname.endswith('.md')]
+    texts = [load_text(fpath) for fpath in md_paths]
+    posts_data = [parse_post(txt) for txt in texts]
+    return posts_data
+        
 
 @app.route('/broadcasts/<page>')
 def broadcasts(page):
     #broadcasts = Announcement.get_all()
-    broadcasts = test_data()
+    broadcasts = test_md_data()
     return render_template('index.html', broadcasts=broadcasts)
 #    sql = 'select count(*) as cnt from announcement'
 #    broadcasts_cnt = query_db(sql, one=True)
